@@ -4,7 +4,7 @@ import { usePrivy } from "@privy-io/react-auth";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import { LayoutDashboard, BookOpen, Award, Settings, LogOut, X } from "lucide-react";
+import { LayoutDashboard, BookOpen, Award, Settings, LogOut, X, User } from "lucide-react";
 
 interface DashboardSidebarProps {
   onClose?: () => void;
@@ -16,6 +16,7 @@ export default function DashboardSidebar({ onClose }: DashboardSidebarProps) {
 
   const navItems = [
     { name: "Overview", path: "/dashboard", icon: <LayoutDashboard className="w-5 h-5" /> },
+    { name: "Profile", path: "/dashboard/profile", icon: <User className="w-5 h-5" /> },
     { name: "Learn", path: "/dashboard/learn", icon: <BookOpen className="w-5 h-5" /> },
     { name: "Rewards", path: "/dashboard/rewards", icon: <Award className="w-5 h-5" /> },
     { name: "Settings", path: "/dashboard/settings", icon: <Settings className="w-5 h-5" /> },

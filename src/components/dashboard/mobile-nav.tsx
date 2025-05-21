@@ -3,7 +3,7 @@
 import { usePrivy } from "@privy-io/react-auth";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, BookOpen, Award, Settings, LogOut } from "lucide-react";
+import { LayoutDashboard, BookOpen, Award, Settings, LogOut, User } from "lucide-react";
 
 export default function MobileNav() {
   const { logout } = usePrivy();
@@ -16,6 +16,11 @@ export default function MobileNav() {
       icon: <LayoutDashboard className="h-5 w-5" /> 
     },
     { 
+      name: "Profile", 
+      path: "/dashboard/profile", 
+      icon: <User className="h-5 w-5" /> 
+    },
+    { 
       name: "Learn", 
       path: "/dashboard/learn", 
       icon: <BookOpen className="h-5 w-5" /> 
@@ -24,11 +29,6 @@ export default function MobileNav() {
       name: "Rewards", 
       path: "/dashboard/rewards", 
       icon: <Award className="h-5 w-5" /> 
-    },
-    { 
-      name: "Settings", 
-      path: "/dashboard/settings", 
-      icon: <Settings className="h-5 w-5" /> 
     },
   ];
 
