@@ -99,7 +99,7 @@ export default function DashboardLayout({
         
         {/* Improved padding and spacing for better responsiveness */}
         <div className="flex-1 p-4 sm:p-6 md:p-8 lg:p-10 pb-24 md:pb-8 overflow-x-hidden max-w-7xl mx-auto w-full">
-          <div className="bg-black rounded-xl shadow-xl border border-gray-800 p-6 sm:p-8">
+          <div className="bg-black rounded-xl shadow-xl border border-gray-800 p-4 sm:p-6 md:p-8 overflow-hidden">
             {children}
           </div>
         </div>

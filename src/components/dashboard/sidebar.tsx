@@ -19,8 +19,9 @@ export default function DashboardSidebar({ onClose }: DashboardSidebarProps) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [displayName, setDisplayName] = useState("");
 
-  // Check if we're on mobile
+  // Check if we're on mobile and set display name
   useEffect(() => {
     const checkIfMobile = () => {
       setIsMobile(window.innerWidth < 1024);
@@ -31,8 +32,18 @@ export default function DashboardSidebar({ onClose }: DashboardSidebarProps) {
 
     checkIfMobile();
     window.addEventListener('resize', checkIfMobile);
+    
+    // Get display name from localStorage if available
+    const savedName = localStorage.getItem('displayName');
+    if (savedName) {
+      setDisplayName(savedName);
+    } else if (user?.email && typeof user.email === 'string') {
+      // Default to email username if no saved name
+      setDisplayName(user.email.split('@')[0]);
+    }
+    
     return () => window.removeEventListener('resize', checkIfMobile);
-  }, []);
+  }, [user]);
 
   const navItems = [
     { name: "Overview", path: "/dashboard", icon: <LayoutDashboard className="w-5 h-5" /> },
@@ -64,7 +75,7 @@ export default function DashboardSidebar({ onClose }: DashboardSidebarProps) {
     <div 
       className={`${
         collapsed ? 'w-20' : 'w-64'
-      } bg-black border-r border-gray-800 h-screen overflow-y-auto md:gradient-border-r transition-all duration-300 ease-in-out relative`}
+      } bg-black border-r border-gray-800 h-screen flex flex-col md:gradient-border-r transition-all duration-300 ease-in-out relative`}
     >
       {/* Toggle collapse button */}
       {!isMobile && (
@@ -104,7 +115,7 @@ export default function DashboardSidebar({ onClose }: DashboardSidebarProps) {
               </div>
               <div>
                 <p className="text-white font-medium truncate max-w-[140px]">
-                  {user?.email && typeof user.email === 'string' ? user.email.split('@')[0] : "User"}
+                  {displayName || (user?.email && typeof user.email === 'string' ? user.email.split('@')[0] : "User")}
                 </p>
                 <p className="text-xs text-gray-400 truncate max-w-[140px]">
                   {user?.wallet?.address ? `${user.wallet.address.slice(0, 6)}...${user.wallet.address.slice(-4)}` : "No wallet connected"}
@@ -123,7 +134,7 @@ export default function DashboardSidebar({ onClose }: DashboardSidebarProps) {
         </div>
       )}
 
-      <nav className={`${collapsed ? 'px-2' : 'px-4'} py-2`}>
+      <nav className={`${collapsed ? 'px-2' : 'px-4'} py-2 flex-grow overflow-y-auto`}>
         <ul className="space-y-2">
           {navItems.map((item) => (
             <li key={item.path}>
@@ -133,7 +144,7 @@ export default function DashboardSidebar({ onClose }: DashboardSidebarProps) {
                 className={`flex items-center ${
                   collapsed ? 'justify-center px-2' : 'px-4'
                 } py-3 rounded-xl transition-colors ${
-                  pathname === item.path
+                  pathname === item.path || (item.path !== "/dashboard" && pathname?.startsWith(item.path))
                     ? "bg-primary/10 text-primary border border-primary/20"
                     : "text-gray-400 hover:bg-gray-900 hover:text-white border border-transparent"
                 }`}
@@ -147,7 +158,7 @@ export default function DashboardSidebar({ onClose }: DashboardSidebarProps) {
         </ul>
       </nav>
 
-      <div className={`absolute bottom-8 left-0 right-0 ${collapsed ? 'px-2' : 'px-4'}`}>
+      <div className={`${collapsed ? 'px-2' : 'px-4'} py-4`}>
         <button
           onClick={handleLogout}
           className={`w-full ${

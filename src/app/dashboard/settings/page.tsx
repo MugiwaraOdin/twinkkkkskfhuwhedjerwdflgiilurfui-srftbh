@@ -35,8 +35,12 @@ export default function SettingsPage() {
   // Handle form submission
   const handleProfileSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // Save display name to localStorage
+    if (displayName.trim()) {
+      localStorage.setItem('displayName', displayName.trim());
+    }
     // In a real app, you would save these settings to your backend
-    alert("Profile settings saved!");
+    alert("Profile settings saved! Please refresh the page to see the changes.");
   };
 
   // Handle notification settings changes
