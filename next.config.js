@@ -34,9 +34,18 @@ const nextConfig = {
   },
   // Allow development origins for iframe access
   allowedDevOrigins: ["work-1-dwfajxuoiycpzfnc.prod-runtime.all-hands.dev", "work-2-dwfajxuoiycpzfnc.prod-runtime.all-hands.dev"],
-  // Disable Reown AppKit
+  // Handle Reown AppKit and other problematic modules
   webpack: (config, { isServer }) => {
-    // Add a rule to ignore @reown modules
+    // Create an alias for @reown modules to use our mock implementations
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@reown/appkit': require.resolve('./src/lib/reown-mock.ts'),
+      '@reown/appkit-ui': require.resolve('./src/lib/reown-mock.ts'),
+      '@reown/appkit-wallet': require.resolve('./src/lib/reown-mock.ts'),
+      '@reown/appkit-controllers': require.resolve('./src/lib/reown-mock.ts'),
+    };
+    
+    // Prevent errors from missing modules
     config.module.rules.push({
       test: /node_modules\/@reown/,
       use: 'null-loader',
@@ -44,6 +53,8 @@ const nextConfig = {
     
     return config;
   },
+  // Disable React strict mode to prevent double rendering issues with Reown
+  reactStrictMode: false,
 };
 
 module.exports = nextConfig;

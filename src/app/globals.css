@@ -37,8 +37,8 @@
     @apply relative;
     &::before {
       content: '';
-      @apply absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-primary/90 to-transparent;
-      box-shadow: 0 0 8px 1px rgba(255, 210, 48, 0.3);
+      @apply absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-primary/80 to-transparent;
+      box-shadow: 0 0 10px 1px rgba(255, 210, 48, 0.4);
     }
   }
   
@@ -46,8 +46,8 @@
     @apply relative;
     &::after {
       content: '';
-      @apply absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-primary/90 to-transparent;
-      box-shadow: 0 0 8px 1px rgba(255, 210, 48, 0.3);
+      @apply absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-primary/80 to-transparent;
+      box-shadow: 0 0 10px 1px rgba(255, 210, 48, 0.4);
     }
   }
   
@@ -55,8 +55,31 @@
     @apply relative;
     &::after {
       content: '';
-      @apply absolute top-0 bottom-0 right-0 w-[3px] bg-gradient-to-b from-transparent via-primary/90 to-transparent;
-      box-shadow: 0 0 8px 1px rgba(255, 210, 48, 0.3);
+      @apply absolute top-0 bottom-0 right-0 w-[3px] bg-gradient-to-b from-transparent via-primary/80 to-transparent;
+      box-shadow: 0 0 10px 1px rgba(255, 210, 48, 0.4);
+    }
+  }
+  
+  .gradient-border-l {
+    @apply relative;
+    &::after {
+      content: '';
+      @apply absolute top-0 bottom-0 left-0 w-[3px] bg-gradient-to-b from-transparent via-primary/80 to-transparent;
+      box-shadow: 0 0 10px 1px rgba(255, 210, 48, 0.4);
+    }
+  }
+  
+  /* Card gradient border */
+  .gradient-border-card {
+    @apply relative border border-gray-800 overflow-hidden;
+    &::before {
+      content: '';
+      @apply absolute inset-0 rounded-xl pointer-events-none;
+      background: linear-gradient(90deg, transparent 0%, rgba(255, 210, 48, 0.1) 50%, transparent 100%) border-box;
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      -webkit-mask-composite: xor;
+      padding: 1px;
     }
   }
   
@@ -65,8 +88,17 @@
     @apply relative;
     &::before {
       content: '';
-      @apply absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary/90 to-transparent;
-      box-shadow: 0 0 6px 1px rgba(255, 210, 48, 0.25);
+      @apply absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary/80 to-transparent;
+      box-shadow: 0 0 8px 1px rgba(255, 210, 48, 0.3);
+    }
+  }
+  
+  /* Hover effects for cards */
+  .card-glow-hover {
+    @apply transition-all duration-300;
+    &:hover {
+      @apply border-primary/30;
+      box-shadow: 0 0 20px 2px rgba(255, 210, 48, 0.15);
     }
   }
   

@@ -2,11 +2,12 @@
 
 import { usePrivy } from "@privy-io/react-auth";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import DashboardSidebar from "@/components/dashboard/sidebar";
 import MobileNav from "@/components/dashboard/mobile-nav";
 import Link from "next/link";
 import Image from "next/image";
+import { Menu } from "lucide-react";
 
 export default function DashboardLayout({
   children,
@@ -15,6 +16,7 @@ export default function DashboardLayout({
 }) {
   const { authenticated, ready } = usePrivy();
   const router = useRouter();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Redirect to home if not authenticated
   useEffect(() => {
@@ -22,6 +24,21 @@ export default function DashboardLayout({
       router.push("/");
     }
   }, [ready, authenticated, router]);
+
+  // Close sidebar when clicking outside on mobile
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const sidebar = document.getElementById('dashboard-sidebar');
+      if (sidebar && !sidebar.contains(event.target as Node) && sidebarOpen) {
+        setSidebarOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [sidebarOpen]);
 
   if (!ready || !authenticated) {
     return (
@@ -33,18 +50,45 @@ export default function DashboardLayout({
 
   return (
     <div className="flex min-h-screen bg-black">
-      <DashboardSidebar />
+      {/* Sidebar with toggle functionality */}
+      <div 
+        id="dashboard-sidebar"
+        className={`fixed md:static inset-y-0 left-0 z-50 transform ${
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        } md:translate-x-0 transition-transform duration-300 ease-in-out`}
+      >
+        <DashboardSidebar onClose={() => setSidebarOpen(false)} />
+      </div>
+      
+      {/* Overlay for mobile sidebar */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+      
       <div className="flex-1 flex flex-col overflow-x-hidden">
         {/* Enhanced Mobile header with better styling */}
-        <div className="md:hidden p-4 gradient-border-b shadow-md">
+        <div className="md:hidden p-4 flex items-center justify-between border-b border-gray-800 bg-black shadow-md">
+          <button 
+            onClick={() => setSidebarOpen(true)}
+            className="p-2 rounded-lg hover:bg-gray-900 transition-colors"
+            aria-label="Open sidebar"
+          >
+            <Menu className="w-6 h-6 text-white" />
+          </button>
+          
           <Link href="/" className="flex items-center space-x-2">
             <Image src="/phoenix-logo.svg" alt="Pnyx Institute Logo" width={32} height={32} className="rounded-full" />
             <span className="text-lg font-bold text-primary">Pnyx Institute</span>
           </Link>
+          
+          <div className="w-10"></div> {/* Empty div for balanced spacing */}
         </div>
         
         {/* Improved padding for better mobile responsiveness */}
-        <div className="flex-1 p-3 sm:p-4 md:p-8 pb-24 md:pb-8 overflow-x-hidden">
+        <div className="flex-1 p-4 sm:p-6 md:p-8 pb-24 md:pb-8 overflow-x-hidden">
           {children}
         </div>
         

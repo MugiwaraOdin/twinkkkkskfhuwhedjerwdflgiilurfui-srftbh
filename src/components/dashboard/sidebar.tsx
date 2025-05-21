@@ -4,31 +4,60 @@ import { usePrivy } from "@privy-io/react-auth";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import { LayoutDashboard, BookOpen, Award, Settings, LogOut, X } from "lucide-react";
 
-export default function DashboardSidebar() {
+interface DashboardSidebarProps {
+  onClose?: () => void;
+}
+
+export default function DashboardSidebar({ onClose }: DashboardSidebarProps) {
   const { logout, user } = usePrivy();
   const pathname = usePathname();
 
   const navItems = [
-    { name: "Overview", path: "/dashboard" },
-    { name: "Learn", path: "/dashboard/learn" },
-    { name: "Rewards", path: "/dashboard/rewards" },
-    { name: "Settings", path: "/dashboard/settings" },
+    { name: "Overview", path: "/dashboard", icon: <LayoutDashboard className="w-5 h-5" /> },
+    { name: "Learn", path: "/dashboard/learn", icon: <BookOpen className="w-5 h-5" /> },
+    { name: "Rewards", path: "/dashboard/rewards", icon: <Award className="w-5 h-5" /> },
+    { name: "Settings", path: "/dashboard/settings", icon: <Settings className="w-5 h-5" /> },
   ];
 
+  const handleNavClick = () => {
+    if (onClose) {
+      onClose();
+    }
+  };
+
+  const handleLogout = () => {
+    if (onClose) {
+      onClose();
+    }
+    logout();
+  };
+
   return (
-    <div className="w-64 bg-black border-r border-gray-800 h-screen sticky top-0 hidden md:block overflow-y-auto gradient-border-r">
-      <div className="p-6">
+    <div className="w-64 bg-black border-r border-gray-800 h-screen overflow-y-auto md:gradient-border-r">
+      <div className="p-6 flex items-center justify-between">
         <Link href="/" className="flex items-center space-x-2">
           <Image src="/phoenix-logo.svg" alt="Pnyx Institute Logo" width={36} height={36} className="rounded-full" />
           <span className="text-xl font-bold text-primary">Pnyx Institute</span>
         </Link>
+        
+        {/* Close button for mobile */}
+        {onClose && (
+          <button 
+            onClick={onClose}
+            className="md:hidden p-2 rounded-lg hover:bg-gray-900 transition-colors"
+            aria-label="Close sidebar"
+          >
+            <X className="w-5 h-5 text-gray-400" />
+          </button>
+        )}
       </div>
 
       <div className="px-4 py-2 mb-6">
-        <div className="bg-gray-900 rounded-lg p-4">
+        <div className="bg-gray-900 rounded-xl p-4 border border-gray-800">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-black font-bold">
+            <div className="w-12 h-12 rounded-full bg-primary/90 flex items-center justify-center text-black font-bold text-lg">
               {user?.email && typeof user.email === 'string' ? user.email[0].toUpperCase() : "U"}
             </div>
             <div>
@@ -44,17 +73,19 @@ export default function DashboardSidebar() {
       </div>
 
       <nav className="px-4 py-2">
-        <ul className="space-y-1">
+        <ul className="space-y-2">
           {navItems.map((item) => (
             <li key={item.path}>
               <Link
                 href={item.path}
-                className={`flex items-center px-4 py-3 rounded-lg transition-colors ${
+                onClick={handleNavClick}
+                className={`flex items-center px-4 py-3 rounded-xl transition-colors ${
                   pathname === item.path
-                    ? "bg-gray-900 text-primary"
-                    : "text-gray-400 hover:bg-gray-900 hover:text-white"
+                    ? "bg-primary/10 text-primary border border-primary/20"
+                    : "text-gray-400 hover:bg-gray-900 hover:text-white border border-transparent"
                 }`}
               >
+                <span className="mr-3">{item.icon}</span>
                 {item.name}
               </Link>
             </li>
@@ -64,9 +95,10 @@ export default function DashboardSidebar() {
 
       <div className="absolute bottom-8 left-0 right-0 px-4">
         <button
-          onClick={logout}
-          className="w-full px-4 py-2 text-gray-400 hover:text-white transition-colors text-left"
+          onClick={handleLogout}
+          className="w-full px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-900 transition-colors text-left rounded-xl flex items-center"
         >
+          <LogOut className="w-5 h-5 mr-3" />
           Sign Out
         </button>
       </div>
