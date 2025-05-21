@@ -32,37 +32,41 @@
     @apply px-3 sm:px-4 md:px-6 lg:px-8 mx-auto max-w-7xl;
   }
   
-  /* Simplified gradient border utilities */
+  /* Improved gradient border utilities */
   .gradient-border-t {
-    @apply relative border-t border-gray-800;
-    background-image: linear-gradient(to right, transparent, rgba(255, 210, 48, 0.5) 50%, transparent 100%);
-    background-size: 100% 1px;
-    background-position: top;
-    background-repeat: no-repeat;
+    @apply relative;
+    &::after {
+      content: '';
+      @apply absolute left-0 right-0 top-0 h-[1px];
+      background: linear-gradient(90deg, transparent, rgba(255, 210, 48, 0.6) 50%, transparent 100%);
+    }
   }
   
   .gradient-border-b {
-    @apply relative border-b border-gray-800;
-    background-image: linear-gradient(to right, transparent, rgba(255, 210, 48, 0.5) 50%, transparent 100%);
-    background-size: 100% 1px;
-    background-position: bottom;
-    background-repeat: no-repeat;
+    @apply relative;
+    &::after {
+      content: '';
+      @apply absolute left-0 right-0 bottom-0 h-[1px];
+      background: linear-gradient(90deg, transparent, rgba(255, 210, 48, 0.6) 50%, transparent 100%);
+    }
   }
   
   .gradient-border-r {
-    @apply relative border-r border-gray-800;
-    background-image: linear-gradient(to bottom, transparent, rgba(255, 210, 48, 0.5) 50%, transparent 100%);
-    background-size: 1px 100%;
-    background-position: right;
-    background-repeat: no-repeat;
+    @apply relative;
+    &::after {
+      content: '';
+      @apply absolute top-0 bottom-0 right-0 w-[1px];
+      background: linear-gradient(180deg, transparent, rgba(255, 210, 48, 0.6) 50%, transparent 100%);
+    }
   }
   
   .gradient-border-l {
-    @apply relative border-l border-gray-800;
-    background-image: linear-gradient(to bottom, transparent, rgba(255, 210, 48, 0.5) 50%, transparent 100%);
-    background-size: 1px 100%;
-    background-position: left;
-    background-repeat: no-repeat;
+    @apply relative;
+    &::after {
+      content: '';
+      @apply absolute top-0 bottom-0 left-0 w-[1px];
+      background: linear-gradient(180deg, transparent, rgba(255, 210, 48, 0.6) 50%, transparent 100%);
+    }
   }
   
   /* Card gradient border */

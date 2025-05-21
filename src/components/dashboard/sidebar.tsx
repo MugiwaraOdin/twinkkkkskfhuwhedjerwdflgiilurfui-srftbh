@@ -75,7 +75,7 @@ export default function DashboardSidebar({ onClose }: DashboardSidebarProps) {
     <div 
       className={`${
         collapsed ? 'w-20' : 'w-64'
-      } bg-black border-r border-gray-800 h-screen flex flex-col md:gradient-border-r transition-all duration-300 ease-in-out relative`}
+      } bg-black border-r border-gray-800/30 h-screen flex flex-col md:gradient-border-r transition-all duration-300 ease-in-out relative`}
     >
       {/* Toggle collapse button */}
       {!isMobile && (

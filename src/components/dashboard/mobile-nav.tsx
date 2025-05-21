@@ -43,7 +43,7 @@ export default function MobileNav() {
   return (
     <div className="md:hidden">
       {/* Fixed bottom navigation bar with enhanced styling */}
-      <div className="fixed bottom-0 left-0 right-0 bg-black border-t border-gray-800 z-40 shadow-xl gradient-border-t">
+      <div className="fixed bottom-0 left-0 right-0 bg-black border-t border-gray-800/30 z-40 shadow-xl gradient-border-t">
         <div className="flex justify-around items-center py-2 px-1">
           {mobileNavItems.map((item) => (
             <Link
