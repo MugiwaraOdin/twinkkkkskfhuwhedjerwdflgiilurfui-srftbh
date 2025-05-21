@@ -26,6 +26,17 @@ export default function PrivyAuthProvider({
         embeddedWallets: {
           createOnLogin: 'users-without-wallets',
         },
+        // Improved login modal settings
+        loginModal: {
+          isClosable: true,
+          widgetMode: "default"
+        },
+        // Simplified flow for better user experience
+        oauth: {
+          redirectUrl: typeof window !== 'undefined' ? `${window.location.origin}/dashboard` : undefined,
+        },
+        // Ensure proper redirect after login
+        defaultChain: 'ethereum',
       }}
     >
       {children}

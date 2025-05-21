@@ -34,20 +34,20 @@
   
   /* Enhanced gradient border utilities */
   .gradient-border-t {
-    @apply relative;
+    @apply relative border-t border-gray-800;
     &::before {
       content: '';
-      @apply absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-primary/80 to-transparent;
-      box-shadow: 0 0 10px 1px rgba(255, 210, 48, 0.4);
+      @apply absolute top-0 left-[5%] right-[5%] h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent;
+      box-shadow: 0 0 15px 1px rgba(255, 210, 48, 0.5);
     }
   }
   
   .gradient-border-b {
-    @apply relative;
+    @apply relative border-b border-gray-800;
     &::after {
       content: '';
-      @apply absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-primary/80 to-transparent;
-      box-shadow: 0 0 10px 1px rgba(255, 210, 48, 0.4);
+      @apply absolute bottom-0 left-[5%] right-[5%] h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent;
+      box-shadow: 0 0 15px 1px rgba(255, 210, 48, 0.5);
     }
   }
   

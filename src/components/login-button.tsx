@@ -2,17 +2,50 @@
 
 import { usePrivy } from "@privy-io/react-auth";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 
 export default function LoginButton() {
-  const { login, authenticated, user } = usePrivy();
+  const { login, authenticated, user, ready } = usePrivy();
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Reset loading state when authentication state changes
+  useEffect(() => {
+    if (ready) {
+      setIsLoading(false);
+    }
+  }, [ready, authenticated]);
+
+  const handleDashboardClick = () => {
+    setIsLoading(true);
+    router.push("/dashboard");
+  };
+
+  const handleLoginClick = () => {
+    setIsLoading(true);
+    login();
+  };
+
+  if (!ready) {
+    return (
+      <Button 
+        className="bg-primary/70 text-black px-3 sm:px-4 py-1.5 rounded-md transition-colors text-sm font-medium"
+        disabled
+      >
+        Loading...
+      </Button>
+    );
+  }
 
   if (authenticated && user) {
     return (
       <Button 
         className="bg-primary text-black px-3 sm:px-4 py-1.5 rounded-md hover:bg-primary/90 transition-colors text-sm font-medium"
-        onClick={() => window.location.href = "/dashboard"}
+        onClick={handleDashboardClick}
+        disabled={isLoading}
       >
-        Dashboard
+        {isLoading ? "Loading..." : "Dashboard"}
       </Button>
     );
   }
@@ -20,9 +53,10 @@ export default function LoginButton() {
   return (
     <Button 
       className="bg-primary text-black px-3 sm:px-4 py-1.5 rounded-md hover:bg-primary/90 transition-colors text-sm font-medium"
-      onClick={login}
+      onClick={handleLoginClick}
+      disabled={isLoading}
     >
-      Sign In
+      {isLoading ? "Loading..." : "Sign In"}
     </Button>
   );
 }
