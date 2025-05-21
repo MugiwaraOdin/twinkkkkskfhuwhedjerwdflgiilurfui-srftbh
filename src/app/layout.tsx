@@ -63,7 +63,7 @@ export default function RootLayout({
       )}>
         <ClientBody>
           <Header />
-          <main className="flex-grow">{children}</main>
+          <main className="flex-grow w-full overflow-x-hidden">{children}</main>
           <Footer />
         </ClientBody>
       </body>

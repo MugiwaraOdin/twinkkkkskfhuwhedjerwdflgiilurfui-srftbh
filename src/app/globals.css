@@ -16,15 +16,37 @@
   }
   
   .btn-primary {
-    @apply bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md font-medium transition-colors;
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 px-3 sm:px-4 py-2 rounded-md font-medium transition-colors;
   }
   
   .btn-secondary {
-    @apply bg-secondary text-secondary-foreground hover:bg-secondary/90 px-4 py-2 rounded-md font-medium transition-colors;
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/90 px-3 sm:px-4 py-2 rounded-md font-medium transition-colors;
   }
   
   .btn-outline {
-    @apply border border-primary text-primary hover:bg-primary hover:text-primary-foreground px-4 py-2 rounded-md font-medium transition-colors;
+    @apply border border-primary text-primary hover:bg-primary hover:text-primary-foreground px-3 sm:px-4 py-2 rounded-md font-medium transition-colors;
+  }
+  
+  /* Responsive container for small screens */
+  .container-sm {
+    @apply px-3 sm:px-4 md:px-6 lg:px-8 mx-auto max-w-7xl;
+  }
+  
+  /* Gradient border utility */
+  .gradient-border-t {
+    @apply relative;
+    &::before {
+      content: '';
+      @apply absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent;
+    }
+  }
+  
+  .gradient-border-b {
+    @apply relative;
+    &::after {
+      content: '';
+      @apply absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent;
+    }
   }
 }
 
