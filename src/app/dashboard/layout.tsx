@@ -35,15 +35,16 @@ export default function DashboardLayout({
     <div className="flex min-h-screen bg-black">
       <DashboardSidebar />
       <div className="flex-1 flex flex-col overflow-x-hidden">
-        {/* Mobile header */}
-        <div className="md:hidden p-4 border-b border-gray-800">
+        {/* Enhanced Mobile header with better styling */}
+        <div className="md:hidden p-4 gradient-border-b shadow-md">
           <Link href="/" className="flex items-center space-x-2">
             <Image src="/phoenix-logo.svg" alt="Pnyx Institute Logo" width={32} height={32} className="rounded-full" />
             <span className="text-lg font-bold text-primary">Pnyx Institute</span>
           </Link>
         </div>
         
-        <div className="flex-1 p-4 md:p-8 pb-20 md:pb-8">
+        {/* Improved padding for better mobile responsiveness */}
+        <div className="flex-1 p-3 sm:p-4 md:p-8 pb-24 md:pb-8 overflow-x-hidden">
           {children}
         </div>
         

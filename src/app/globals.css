@@ -32,12 +32,13 @@
     @apply px-3 sm:px-4 md:px-6 lg:px-8 mx-auto max-w-7xl;
   }
   
-  /* Gradient border utility */
+  /* Enhanced gradient border utilities */
   .gradient-border-t {
     @apply relative;
     &::before {
       content: '';
-      @apply absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary/70 to-transparent;
+      @apply absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-primary/90 to-transparent;
+      box-shadow: 0 0 8px 1px rgba(255, 210, 48, 0.3);
     }
   }
   
@@ -45,7 +46,8 @@
     @apply relative;
     &::after {
       content: '';
-      @apply absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary/70 to-transparent;
+      @apply absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-primary/90 to-transparent;
+      box-shadow: 0 0 8px 1px rgba(255, 210, 48, 0.3);
     }
   }
   
@@ -53,7 +55,18 @@
     @apply relative;
     &::after {
       content: '';
-      @apply absolute top-0 bottom-0 right-0 w-[2px] bg-gradient-to-b from-transparent via-primary/70 to-transparent;
+      @apply absolute top-0 bottom-0 right-0 w-[3px] bg-gradient-to-b from-transparent via-primary/90 to-transparent;
+      box-shadow: 0 0 8px 1px rgba(255, 210, 48, 0.3);
+    }
+  }
+  
+  /* Mobile-specific gradient borders */
+  .gradient-border-mobile-t {
+    @apply relative;
+    &::before {
+      content: '';
+      @apply absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary/90 to-transparent;
+      box-shadow: 0 0 6px 1px rgba(255, 210, 48, 0.25);
     }
   }
   

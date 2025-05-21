@@ -32,6 +32,18 @@ const nextConfig = {
       },
     ],
   },
+  // Allow development origins for iframe access
+  allowedDevOrigins: ["work-1-dwfajxuoiycpzfnc.prod-runtime.all-hands.dev", "work-2-dwfajxuoiycpzfnc.prod-runtime.all-hands.dev"],
+  // Disable Reown AppKit
+  webpack: (config, { isServer }) => {
+    // Add a rule to ignore @reown modules
+    config.module.rules.push({
+      test: /node_modules\/@reown/,
+      use: 'null-loader',
+    });
+    
+    return config;
+  },
 };
 
 module.exports = nextConfig;
