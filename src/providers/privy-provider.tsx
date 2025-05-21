@@ -35,7 +35,8 @@ export default function PrivyAuthProvider({
         oauth: {
           redirectUrl: typeof window !== 'undefined' ? `${window.location.origin}/dashboard` : undefined,
         },
-        // Ensure proper redirect after login
+        // Support for Ethereum chain
+        supportedChains: ['ethereum'],
         defaultChain: 'ethereum',
       }}
     >
