@@ -4,10 +4,10 @@ import { usePrivy } from "@privy-io/react-auth";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { 
   LayoutDashboard, BookOpen, Award, Settings, LogOut, X, User, 
-  ChevronLeft, ChevronRight, BarChart3
+  ChevronLeft, ChevronRight, BarChart3, Upload
 } from "lucide-react";
 
 interface DashboardSidebarProps {
@@ -17,9 +17,11 @@ interface DashboardSidebarProps {
 export default function DashboardSidebar({ onClose }: DashboardSidebarProps) {
   const { logout, user } = usePrivy();
   const pathname = usePathname();
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true); // Default to collapsed
   const [isMobile, setIsMobile] = useState(false);
   const [displayName, setDisplayName] = useState("");
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Check if we're on mobile and set display name
   useEffect(() => {
@@ -40,6 +42,12 @@ export default function DashboardSidebar({ onClose }: DashboardSidebarProps) {
     } else if (user?.email && typeof user.email === 'string') {
       // Default to email username if no saved name
       setDisplayName(user.email.split('@')[0]);
+    }
+    
+    // Load saved profile image from localStorage
+    const savedImage = localStorage.getItem('profileImage');
+    if (savedImage) {
+      setProfileImage(savedImage);
     }
     
     return () => window.removeEventListener('resize', checkIfMobile);
@@ -71,12 +79,40 @@ export default function DashboardSidebar({ onClose }: DashboardSidebarProps) {
     setCollapsed(!collapsed);
   };
 
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+        setProfileImage(result);
+        localStorage.setItem('profileImage', result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const triggerFileInput = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
   return (
     <div 
       className={`${
-        collapsed ? 'w-20' : 'w-64'
+        collapsed ? 'w-16' : 'w-56'
       } bg-black border-r border-gray-800/30 h-screen flex flex-col md:gradient-border-r transition-all duration-300 ease-in-out relative`}
     >
+      {/* Hidden file input for profile image upload */}
+      <input 
+        type="file" 
+        accept="image/*" 
+        className="hidden" 
+        onChange={handleImageUpload}
+        ref={fileInputRef}
+      />
+
       {/* Toggle collapse button */}
       {!isMobile && (
         <button 
@@ -88,10 +124,10 @@ export default function DashboardSidebar({ onClose }: DashboardSidebarProps) {
         </button>
       )}
 
-      <div className={`${collapsed ? 'justify-center p-4' : 'justify-between p-6'} flex items-center`}>
+      <div className={`${collapsed ? 'justify-center p-3' : 'justify-between p-4'} flex items-center`}>
         <Link href="/" className={`flex items-center ${collapsed ? 'justify-center' : 'space-x-2'}`}>
-          <Image src="/phoenix-logo.svg" alt="Pnyx Institute Logo" width={36} height={36} className="rounded-full" />
-          {!collapsed && <span className="text-xl font-bold text-primary">Pnyx Institute</span>}
+          <Image src="/phoenix-logo.svg" alt="Pnyx Institute Logo" width={collapsed ? 28 : 32} height={collapsed ? 28 : 32} className="rounded-full" />
+          {!collapsed && <span className="text-lg font-bold text-primary">Pnyx</span>}
         </Link>
         
         {/* Close button for mobile */}
@@ -107,17 +143,27 @@ export default function DashboardSidebar({ onClose }: DashboardSidebarProps) {
       </div>
 
       {!collapsed && (
-        <div className="px-4 py-2 mb-6">
-          <div className="bg-gray-900 rounded-xl p-4 border border-gray-800">
+        <div className="px-3 py-2 mb-4">
+          <div className="bg-gray-900 rounded-xl p-3 border border-gray-800">
             <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 rounded-full bg-primary/90 flex items-center justify-center text-black font-bold text-lg">
-                {user?.email && typeof user.email === 'string' ? user.email[0].toUpperCase() : "U"}
+              <div 
+                className="relative w-10 h-10 rounded-full bg-primary/90 flex items-center justify-center text-black font-bold text-lg cursor-pointer overflow-hidden group"
+                onClick={triggerFileInput}
+              >
+                {profileImage ? (
+                  <Image src={profileImage} alt="Profile" fill style={{ objectFit: 'cover' }} />
+                ) : (
+                  displayName ? displayName[0].toUpperCase() : "U"
+                )}
+                <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Upload className="w-4 h-4 text-white" />
+                </div>
               </div>
               <div>
-                <p className="text-white font-medium truncate max-w-[140px]">
-                  {displayName || (user?.email && typeof user.email === 'string' ? user.email.split('@')[0] : "User")}
+                <p className="text-white font-medium truncate max-w-[120px]">
+                  {displayName || "User"}
                 </p>
-                <p className="text-xs text-gray-400 truncate max-w-[140px]">
+                <p className="text-xs text-gray-400 truncate max-w-[120px]">
                   {user?.wallet?.address ? `${user.wallet.address.slice(0, 6)}...${user.wallet.address.slice(-4)}` : "No wallet connected"}
                 </p>
               </div>
@@ -127,23 +173,33 @@ export default function DashboardSidebar({ onClose }: DashboardSidebarProps) {
       )}
 
       {collapsed && (
-        <div className="flex justify-center py-4">
-          <div className="w-12 h-12 rounded-full bg-primary/90 flex items-center justify-center text-black font-bold text-lg">
-            {user?.email && typeof user.email === 'string' ? user.email[0].toUpperCase() : "U"}
+        <div className="flex justify-center py-3">
+          <div 
+            className="relative w-10 h-10 rounded-full bg-primary/90 flex items-center justify-center text-black font-bold text-lg cursor-pointer overflow-hidden group"
+            onClick={triggerFileInput}
+          >
+            {profileImage ? (
+              <Image src={profileImage} alt="Profile" fill style={{ objectFit: 'cover' }} />
+            ) : (
+              displayName ? displayName[0].toUpperCase() : "U"
+            )}
+            <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <Upload className="w-4 h-4 text-white" />
+            </div>
           </div>
         </div>
       )}
 
-      <nav className={`${collapsed ? 'px-2' : 'px-4'} py-2 flex-grow overflow-y-auto`}>
-        <ul className="space-y-2">
+      <nav className={`${collapsed ? 'px-2' : 'px-3'} py-2 flex-grow overflow-y-auto`}>
+        <ul className="space-y-1">
           {navItems.map((item) => (
             <li key={item.path}>
               <Link
                 href={item.path}
                 onClick={handleNavClick}
                 className={`flex items-center ${
-                  collapsed ? 'justify-center px-2' : 'px-4'
-                } py-3 rounded-xl transition-colors ${
+                  collapsed ? 'justify-center px-1.5' : 'px-3'
+                } py-2.5 rounded-lg transition-colors ${
                   pathname === item.path || (item.path !== "/dashboard" && pathname?.startsWith(item.path))
                     ? "bg-primary/10 text-primary border border-primary/20"
                     : "text-gray-400 hover:bg-gray-900 hover:text-white border border-transparent"
@@ -158,12 +214,12 @@ export default function DashboardSidebar({ onClose }: DashboardSidebarProps) {
         </ul>
       </nav>
 
-      <div className={`${collapsed ? 'px-2' : 'px-4'} py-4`}>
+      <div className={`${collapsed ? 'px-2' : 'px-3'} py-4`}>
         <button
           onClick={handleLogout}
           className={`w-full ${
-            collapsed ? 'justify-center px-2' : 'px-4'
-          } py-3 text-gray-400 hover:text-white hover:bg-gray-900 transition-colors rounded-xl flex items-center ${
+            collapsed ? 'justify-center px-1.5' : 'px-3'
+          } py-2.5 text-gray-400 hover:text-white hover:bg-gray-900 transition-colors rounded-lg flex items-center ${
             collapsed ? 'justify-center' : 'text-left'
           }`}
           title={collapsed ? "Sign Out" : undefined}

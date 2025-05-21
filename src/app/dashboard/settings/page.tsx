@@ -9,24 +9,40 @@ export default function SettingsPage() {
   
   // State for form inputs
   const [displayName, setDisplayName] = useState("");
+  const [username, setUsername] = useState("");
+  const [bio, setBio] = useState("");
   const [loading, setLoading] = useState(true);
   const [notificationSettings, setNotificationSettings] = useState({
     courseUpdates: true,
     achievements: true,
     marketingEmails: false,
   });
+  const [saveSuccess, setSaveSuccess] = useState(false);
 
   useEffect(() => {
     if (ready) {
+      // Load saved data from localStorage
+      const savedName = localStorage.getItem('displayName');
+      const savedUsername = localStorage.getItem('username');
+      const savedBio = localStorage.getItem('bio');
+      
       // Simulate loading user data
       const timer = setTimeout(() => {
         setLoading(false);
-        // Set display name from email if available
-        if (user?.email && typeof user.email === 'string') {
+        
+        // Set display name from localStorage or email if available
+        if (savedName) {
+          setDisplayName(savedName);
+        } else if (user?.email && typeof user.email === 'string') {
           const nameFromEmail = user.email.split('@')[0];
           setDisplayName(nameFromEmail);
         }
-      }, 1000);
+        
+        // Set username and bio if available
+        if (savedUsername) setUsername(savedUsername);
+        if (savedBio) setBio(savedBio);
+        
+      }, 800);
       
       return () => clearTimeout(timer);
     }
@@ -35,12 +51,27 @@ export default function SettingsPage() {
   // Handle form submission
   const handleProfileSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Save display name to localStorage
+    
+    // Save user data to localStorage
     if (displayName.trim()) {
       localStorage.setItem('displayName', displayName.trim());
     }
-    // In a real app, you would save these settings to your backend
-    alert("Profile settings saved! Please refresh the page to see the changes.");
+    
+    if (username.trim()) {
+      localStorage.setItem('username', username.trim());
+    }
+    
+    if (bio.trim()) {
+      localStorage.setItem('bio', bio.trim());
+    }
+    
+    // Show success message
+    setSaveSuccess(true);
+    
+    // Hide success message after 3 seconds
+    setTimeout(() => {
+      setSaveSuccess(false);
+    }, 3000);
   };
 
   // Handle notification settings changes
@@ -93,7 +124,15 @@ export default function SettingsPage() {
                     <p className="text-gray-300">{user.email}</p>
                   </div>
                   <button
-                    onClick={() => user.email && unlinkEmail(user.email)}
+                    onClick={() => {
+                      if (user?.email && typeof user.email === 'string') {
+                        try {
+                          unlinkEmail(user.email);
+                        } catch (error) {
+                          console.error("Error unlinking email:", error);
+                        }
+                      }
+                    }}
                     className="text-sm text-red-400 hover:text-red-300 transition-colors px-3 py-1 rounded-md hover:bg-red-400/10"
                   >
                     Remove
@@ -136,11 +175,21 @@ export default function SettingsPage() {
                       <Wallet className="w-4 h-4 text-primary" />
                     </div>
                     <p className="text-gray-300 font-mono text-sm truncate max-w-[180px]">
-                      {typeof user.wallet.address === 'string' ? user.wallet.address : 'Connected Wallet'}
+                      {user?.wallet?.address && typeof user.wallet.address === 'string' 
+                        ? `${user.wallet.address.slice(0, 6)}...${user.wallet.address.slice(-4)}` 
+                        : 'Connected Wallet'}
                     </p>
                   </div>
                   <button
-                    onClick={() => user.wallet && unlinkWallet(user.wallet)}
+                    onClick={() => {
+                      if (user?.wallet) {
+                        try {
+                          unlinkWallet(user.wallet);
+                        } catch (error) {
+                          console.error("Error unlinking wallet:", error);
+                        }
+                      }
+                    }}
                     className="text-sm text-red-400 hover:text-red-300 transition-colors px-3 py-1 rounded-md hover:bg-red-400/10"
                   >
                     Disconnect
@@ -178,6 +227,15 @@ export default function SettingsPage() {
         </div>
         
         <form onSubmit={handleProfileSubmit} className="space-y-6">
+          {saveSuccess && (
+            <div className="bg-green-500/20 border border-green-500/30 text-green-400 px-4 py-3 rounded-lg flex items-center">
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              Profile settings saved successfully!
+            </div>
+          )}
+          
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label htmlFor="displayName" className="block text-sm font-medium text-gray-400 mb-2">
@@ -202,6 +260,8 @@ export default function SettingsPage() {
                 <input
                   type="text"
                   id="username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                   placeholder="username"
                   className="w-full pl-8 px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-primary focus:border-transparent"
                 />
@@ -216,6 +276,8 @@ export default function SettingsPage() {
             <textarea
               id="bio"
               rows={3}
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
               placeholder="Tell us about yourself"
               className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-primary focus:border-transparent"
             ></textarea>
