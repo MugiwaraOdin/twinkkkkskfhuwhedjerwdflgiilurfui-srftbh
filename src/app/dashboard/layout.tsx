@@ -79,27 +79,27 @@ export default function DashboardLayout({
       )}
       
       <div className="flex-1 flex flex-col overflow-x-hidden">
-        {/* Enhanced Mobile header with better styling */}
-        <div className="md:hidden p-4 flex items-center justify-between border-b border-gray-800 bg-black shadow-md sticky top-0 z-10">
+        {/* Enhanced Mobile header with improved styling and responsiveness */}
+        <div className="md:hidden p-3 flex items-center justify-between border-b border-gray-800/30 bg-black shadow-md sticky top-0 z-10 gradient-border-b">
           <button 
             onClick={() => setSidebarOpen(true)}
-            className="p-2 rounded-lg hover:bg-gray-900 transition-colors"
+            className="p-1.5 rounded-lg hover:bg-gray-900 transition-colors"
             aria-label="Open sidebar"
           >
-            <Menu className="w-6 h-6 text-white" />
+            <Menu className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
           </button>
           
-          <Link href="/" className="flex items-center space-x-2">
-            <Image src="/phoenix-logo.svg" alt="Pnyx Institute Logo" width={32} height={32} className="rounded-full" />
-            <span className="text-lg font-bold text-primary">Pnyx Institute</span>
+          <Link href="/" className="flex items-center space-x-1.5 sm:space-x-2">
+            <Image src="/phoenix-logo.svg" alt="Pnyx Institute Logo" width={28} height={28} className="rounded-full" />
+            <span className="text-base sm:text-lg font-bold text-primary">Pnyx Institute</span>
           </Link>
           
-          <div className="w-10"></div> {/* Empty div for balanced spacing */}
+          <div className="w-8 sm:w-10"></div> {/* Empty div for balanced spacing */}
         </div>
         
-        {/* Improved padding and spacing for better responsiveness */}
-        <div className="flex-1 p-4 sm:p-6 md:p-8 lg:p-10 pb-24 md:pb-8 overflow-x-hidden max-w-7xl mx-auto w-full">
-          <div className="bg-black rounded-xl shadow-xl border border-gray-800 p-4 sm:p-6 md:p-8 overflow-hidden">
+        {/* Further improved padding and spacing for better responsiveness */}
+        <div className="flex-1 p-3 sm:p-5 md:p-8 lg:p-10 pb-24 md:pb-8 overflow-x-hidden max-w-7xl mx-auto w-full">
+          <div className="bg-black rounded-xl shadow-xl border border-gray-800 p-3 sm:p-5 md:p-6 lg:p-8 overflow-hidden">
             {children}
           </div>
         </div>

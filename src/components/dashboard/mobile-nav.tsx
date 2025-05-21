@@ -13,27 +13,27 @@ export default function MobileNav() {
     { 
       name: "Overview", 
       path: "/dashboard", 
-      icon: <LayoutDashboard className="h-5 w-5" /> 
+      icon: <LayoutDashboard className="h-4 w-4 sm:h-5 sm:w-5" /> 
     },
     { 
       name: "Profile", 
       path: "/dashboard/profile", 
-      icon: <User className="h-5 w-5" /> 
+      icon: <User className="h-4 w-4 sm:h-5 sm:w-5" /> 
     },
     { 
       name: "Analytics", 
       path: "/dashboard/profile/analytics", 
-      icon: <BarChart3 className="h-5 w-5" /> 
+      icon: <BarChart3 className="h-4 w-4 sm:h-5 sm:w-5" /> 
     },
     { 
       name: "Learn", 
       path: "/dashboard/learn", 
-      icon: <BookOpen className="h-5 w-5" /> 
+      icon: <BookOpen className="h-4 w-4 sm:h-5 sm:w-5" /> 
     },
     { 
       name: "Rewards", 
       path: "/dashboard/rewards", 
-      icon: <Award className="h-5 w-5" /> 
+      icon: <Award className="h-4 w-4 sm:h-5 sm:w-5" /> 
     },
   ];
 
@@ -49,14 +49,15 @@ export default function MobileNav() {
             <Link
               key={item.path}
               href={item.path}
-              className={`flex flex-col items-center justify-center px-2 py-2 rounded-lg transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center px-1.5 py-1.5 rounded-lg transition-all duration-200 ${
                 pathname === item.path || (item.path !== "/dashboard" && pathname?.startsWith(item.path))
                   ? "text-primary font-medium bg-primary/10 border border-primary/20"
                   : "text-gray-400 hover:text-gray-200 hover:bg-gray-900/40 border border-transparent"
               }`}
+              aria-label={item.name}
             >
-              <span className="mb-1">{item.icon}</span>
-              <span className="text-[10px] font-medium">{item.name}</span>
+              <span className="mb-0.5">{item.icon}</span>
+              <span className="text-[9px] sm:text-[10px] font-medium whitespace-nowrap">{item.name}</span>
             </Link>
           ))}
         </div>
