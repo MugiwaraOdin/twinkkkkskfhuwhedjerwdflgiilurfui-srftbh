@@ -17,11 +17,18 @@ export default function DashboardLayout({
   const { authenticated, ready } = usePrivy();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Redirect to home if not authenticated
   useEffect(() => {
     if (ready && !authenticated) {
       router.push("/");
+    } else if (ready && authenticated) {
+      // Add a small delay to ensure smooth transitions
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
+      return () => clearTimeout(timer);
     }
   }, [ready, authenticated, router]);
 
@@ -40,10 +47,13 @@ export default function DashboardLayout({
     };
   }, [sidebarOpen]);
 
-  if (!ready || !authenticated) {
+  if (!ready || !authenticated || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-black">
-        <div className="w-16 h-16 border-4 border-primary border-solid rounded-full border-t-transparent animate-spin"></div>
+        <div className="flex flex-col items-center">
+          <div className="w-16 h-16 border-4 border-primary border-solid rounded-full border-t-transparent animate-spin mb-4"></div>
+          <p className="text-gray-400 animate-pulse">Loading your dashboard...</p>
+        </div>
       </div>
     );
   }
@@ -63,14 +73,14 @@ export default function DashboardLayout({
       {/* Overlay for mobile sidebar */}
       {sidebarOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+          className="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm z-40 md:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
       
       <div className="flex-1 flex flex-col overflow-x-hidden">
         {/* Enhanced Mobile header with better styling */}
-        <div className="md:hidden p-4 flex items-center justify-between border-b border-gray-800 bg-black shadow-md">
+        <div className="md:hidden p-4 flex items-center justify-between border-b border-gray-800 bg-black shadow-md sticky top-0 z-10">
           <button 
             onClick={() => setSidebarOpen(true)}
             className="p-2 rounded-lg hover:bg-gray-900 transition-colors"
@@ -87,9 +97,11 @@ export default function DashboardLayout({
           <div className="w-10"></div> {/* Empty div for balanced spacing */}
         </div>
         
-        {/* Improved padding for better mobile responsiveness */}
-        <div className="flex-1 p-4 sm:p-6 md:p-8 pb-24 md:pb-8 overflow-x-hidden">
-          {children}
+        {/* Improved padding and spacing for better responsiveness */}
+        <div className="flex-1 p-4 sm:p-6 md:p-8 lg:p-10 pb-24 md:pb-8 overflow-x-hidden max-w-7xl mx-auto w-full">
+          <div className="bg-black rounded-xl shadow-xl border border-gray-800 p-6 sm:p-8">
+            {children}
+          </div>
         </div>
         
         <MobileNav />

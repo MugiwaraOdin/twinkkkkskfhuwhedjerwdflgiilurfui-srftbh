@@ -132,7 +132,7 @@ export default function SettingsPage() {
                       <Wallet className="w-4 h-4 text-primary" />
                     </div>
                     <p className="text-gray-300 font-mono text-sm truncate max-w-[180px]">
-                      {user.wallet.address}
+                      {typeof user.wallet.address === 'string' ? user.wallet.address : 'Connected Wallet'}
                     </p>
                   </div>
                   <button
