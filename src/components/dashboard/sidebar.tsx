@@ -29,11 +29,11 @@ export default function DashboardSidebar() {
         <div className="bg-gray-900 rounded-lg p-4">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-black font-bold">
-              {user?.email ? user.email[0].toUpperCase() : "U"}
+              {user?.email && typeof user.email === 'string' ? user.email[0].toUpperCase() : "U"}
             </div>
             <div>
               <p className="text-white font-medium truncate max-w-[140px]">
-                {user?.email ? user.email.split('@')[0] : "User"}
+                {user?.email && typeof user.email === 'string' ? user.email.split('@')[0] : "User"}
               </p>
               <p className="text-xs text-gray-400 truncate max-w-[140px]">
                 {user?.wallet?.address ? `${user.wallet.address.slice(0, 6)}...${user.wallet.address.slice(-4)}` : "No wallet connected"}

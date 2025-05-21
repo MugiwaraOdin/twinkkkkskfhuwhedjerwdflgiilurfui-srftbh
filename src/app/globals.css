@@ -37,7 +37,7 @@
     @apply relative;
     &::before {
       content: '';
-      @apply absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent;
+      @apply absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary/70 to-transparent;
     }
   }
   
@@ -45,7 +45,7 @@
     @apply relative;
     &::after {
       content: '';
-      @apply absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent;
+      @apply absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary/70 to-transparent;
     }
   }
   
@@ -53,8 +53,13 @@
     @apply relative;
     &::after {
       content: '';
-      @apply absolute top-0 bottom-0 right-0 w-px bg-gradient-to-b from-transparent via-primary/60 to-transparent;
+      @apply absolute top-0 bottom-0 right-0 w-[2px] bg-gradient-to-b from-transparent via-primary/70 to-transparent;
     }
+  }
+  
+  /* Responsive container for mobile */
+  .container-xs {
+    @apply px-2 sm:px-3 md:px-4 mx-auto max-w-7xl;
   }
 }
 
