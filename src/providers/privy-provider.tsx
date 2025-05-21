@@ -23,10 +23,7 @@ export default function PrivyAuthProvider({
           accentColor: '#ffd230', // Primary color from your theme
           logo: '/phoenix-logo.svg',
         },
-        embeddedWallets: {
-          createOnLogin: 'users-without-wallets',
-        },
-        // Improved login modal settings
+        // Simplified login modal settings
         loginModal: {
           isClosable: true,
           widgetMode: "default"
@@ -34,10 +31,7 @@ export default function PrivyAuthProvider({
         // Simplified flow for better user experience
         oauth: {
           redirectUrl: typeof window !== 'undefined' ? `${window.location.origin}/dashboard` : undefined,
-        },
-        // Support for Ethereum chain
-        supportedChains: ['ethereum'],
-        defaultChain: 'ethereum',
+        }
       }}
     >
       {children}
