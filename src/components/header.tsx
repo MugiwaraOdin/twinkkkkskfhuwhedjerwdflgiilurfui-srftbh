@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import LoginButton from './login-button'
 
 export default function Header() {
   return (
@@ -18,9 +19,7 @@ export default function Header() {
         <Link href="#" className="text-sm text-primary hover:text-primary/80 transition-colors">
           Cohorts
         </Link>
-        <Link href="#" className="bg-primary text-black px-3 sm:px-4 py-1.5 rounded-md hover:bg-primary/90 transition-colors text-sm font-medium">
-          Sign In
-        </Link>
+        <LoginButton />
       </nav>
     </header>
   )

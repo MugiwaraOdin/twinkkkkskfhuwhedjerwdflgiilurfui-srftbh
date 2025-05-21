@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import PrivyAuthProvider from "@/providers/privy-provider";
 
 export default function ClientBody({
   children,
@@ -15,5 +16,5 @@ export default function ClientBody({
     document.body.className = "antialiased";
   }, []);
 
-  return children;
+  return <PrivyAuthProvider>{children}</PrivyAuthProvider>;
 }

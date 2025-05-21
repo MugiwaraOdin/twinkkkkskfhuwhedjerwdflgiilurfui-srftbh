@@ -48,6 +48,14 @@
       @apply absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent;
     }
   }
+  
+  .gradient-border-r {
+    @apply relative;
+    &::after {
+      content: '';
+      @apply absolute top-0 bottom-0 right-0 w-px bg-gradient-to-b from-transparent via-primary/60 to-transparent;
+    }
+  }
 }
 
 @layer base {
